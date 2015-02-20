@@ -8,9 +8,10 @@
 #include "Point.h"
 #include <vector>
 #include <algorithm>
+#include <math.h>
 
 using namespace std;
-
+double distance();
 int main(int argc, char **argv){
   
   // verify the correct number of parameters
@@ -28,54 +29,48 @@ int main(int argc, char **argv){
     exit(2);
   }
   
-  int num_cases;
+  int num_cases = 1;
   double xcoord, ycoord;  
   FILE *fp = fopen(argv[1], "r");
   vector<Point>* points = new vector<Point>;
+  vector<double> *sorting = new vector<double>;
+  while (num_cases != 0){
+    file >> num_cases;
+    int numcases = 0;
 
-  file >> num_cases;
-  int numcases = 0;
+    while(numcases < num_cases){
+      file >> xcoord;
+      file >> ycoord;
+      Point add = Point(xcoord,ycoord);  
+      points->push_back(add);
+      sorting->push_back(xcoord);
+      numcases++;
+    }
 
-  /*while(numcases < num_cases){
-    file >> xcoord;
-    file >> ycoord;
-    Point add = new Point(xcoord,ycoord);  
-
-
-    
+    cout << endl;
     //Sorts values
     sort(sorting->begin(),sorting->end());
-    vector<MoveComp> *final= new vector<MoveComp>;
-    vector<MoveComp> *store2 = new vector<MoveComp>;
-    int check = 0;
-    for(std::vector<int>::const_iterator y = sorting->begin(); y != sorting->end(); ++y){
-      for(std::vector<MoveComp>::const_iterator z = store->begin(); z != store->end(); ++z){        if(*y == z->getCost() && check < 1){
-	  MoveComp add2 = MoveComp(z->getCost(),z->getComp());
-	  final->push_back(add2);
-	  check++;
+   
+    vector<Point> *store = new vector<Point>;
+   
+    for(vector<double>::const_iterator y = sorting->begin(); y != sorting->end(); ++y){
+      for(vector<Point>::const_iterator z = points->begin(); z != points->end(); ++z){        
+	if(*y == z->getX() && store->size() < points->size()){
+	  Point add2 = Point(z->getX(),z->getY());
+	  store->push_back(add2);
         }
-	else 
-	  {
-	    MoveComp add2 = MoveComp(z->getCost(),z->getComp());
-	    store2->push_back(add2);  
-	  }
       }
-      check = 0;
-      store->clear();
-      for(std::vector<MoveComp>::const_iterator x = store2->begin(); x != store2->end(); ++x){
-	MoveComp add2 = MoveComp(x->getCost(),x->getComp());
-	store->push_back(add2);
-      } 
-      store2->clear();
-      
     }
-    //Prints values in ascending order
-    for(std::vector<MoveComp>::const_iterator x = final->begin(); x != final->end(); ++x){
-      std::cout << x->getComp() << " " << x->getCost() << endl;
+    for(vector<Point>::iterator a = store->begin(); a != store->end(); ++a){
+      cout << a->getX() << "," << a->getY() << endl;
     }
-    
-    //Goes to next case and empties the Vector
-    numcases++;
-  }*/
   
+    sorting->clear();
+    points->clear();
+    store->clear();
+  }
+}
+
+double distance(double a, double b, double c, double d){
+  return pow((pow((a-c),2)-pow((b-d),2)),.5);
 }

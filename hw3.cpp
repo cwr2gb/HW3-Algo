@@ -10,16 +10,19 @@
 #include <algorithm>
 #include <iterator>
 #include <math.h>
-
+#include <cmath>
 using namespace std;
+//Prototypes
 double distance(double a, double b, double c, double d);
 double bruteF(vector<Point> p);
-double getShortest(vector<Point> p, vector<Point> q);
+double getShortest(vector<Point> p, vector<Point> x, vector<Point> y);
+//Vectors for points
 vector<Point> points;
 vector<Point> pointsX;
 vector<Point> pointsY;
 vector<double> sortX;
 vector<double> sortY;
+//Min Distance variable
 double minDistance = 10001;
 
 int main(int argc, char **argv){
@@ -81,26 +84,34 @@ int main(int argc, char **argv){
       }
     } 
     
-    //Prints Points
+    /*Prints Points
     cout << "Points" << endl;
     for(vector<Point>::iterator a = points.begin(); a != points.end(); ++a){
       cout << a->getX() << "," << a->getY() << endl;
-    }
+    }*/
     
-    //Prints Points with x-coords increasing
+    /*Prints Points with x-coords increasing
     cout << "PointsX" << endl;
     for(vector<Point>::iterator b = pointsX.begin(); b != pointsX.end(); ++b){
       cout << b->getX() << "," << b->getY() << endl;
-    }
+    }*/
     
-    //Prints Points with y-coords increasing
+    /*Prints Points with y-coords increasing
     cout << "PointsY" << endl;
     for(vector<Point>::iterator c = pointsY.begin(); c != pointsY.end(); ++c){
       cout << c->getX() << "," << c->getY() << endl;
+    }*/
+    
+    if(numcases != 0){
+      if(getShortest(points,pointsX,pointsY) >= 10000){
+	cout << "infinity" << endl;
+      }
+      else{
+	cout << getShortest(points,pointsX,pointsY) << endl;
+      }
     }
     
-   // cout << getShortest(left,right) << endl;
-    
+    minDistance = 10001;
     points.clear();
     pointsX.clear();
     pointsY.clear();
@@ -111,25 +122,49 @@ int main(int argc, char **argv){
 }
 
 double distance(double a, double b, double c, double d){
-  return pow((pow((a-c),2)-pow((b-d),2)),.5);
+  return pow(abs(pow(abs(a-c),2)+pow(abs(b-d),2)),.5);
 }
 
-/*double getShortest(vector<Point> p, vector<Point> q){
-  if(p.size() == 1 && q.size() == 1){
-    return distance(p.getX(),p.getY(),q.getX(),q.getY());
-  }
-  else if(p.size() == 2 && q.size()==1){
-  }
-  else if(q.size() == 2 && p.size()==1){
+double getShortest(vector<Point> p, vector<Point> x, vector<Point> y){
+  if(p.size() < 4){
+    return bruteF(p);
   }
   else{ 
-   vector<Point> l(store.begin(),store.begin()+store.size()/2);
-   vector<Point> r(store.begin()+store.size()/2,store.end());
-    return getShortest(l,r) ;
-  }
-}*/
-
-double bruteF(vector<Point> p){
-  for(vector<Point>::const_iterator p = points.begin(); p != points.end(); ++p){      
+    //return getShortest(p,x,y);
+    return 5.0;
   }
 }
+
+double bruteF(vector<Point> p){
+  int count = 0;
+  int count2 = 0;
+  for(vector<Point>::iterator a = p.begin(); a != p.end(); ++a){
+    count++;
+    for(vector<Point>::iterator b = p.begin(); b != p.end(); ++b){ 
+      count2++;
+      if(count != count2){
+	if(minDistance > distance(a->getX(), a->getY(), b->getX(), b->getY())){
+	  minDistance = distance(a->getX(), a->getY(), b->getX(), b->getY());
+	}
+      }
+    }
+    count2 = 0;
+  }
+  return minDistance;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

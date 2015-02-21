@@ -11,6 +11,7 @@
 #include <iterator>
 #include <math.h>
 #include <cmath>
+#include <iomanip>
 using namespace std;
 //Prototypes
 double distance(double a, double b, double c, double d);
@@ -60,7 +61,6 @@ int main(int argc, char **argv){
       numcases++;
     }
 
-    cout << endl;
     //Sorts X values
     sort(sortX.begin(),sortX.end());
    
@@ -107,7 +107,7 @@ int main(int argc, char **argv){
 	cout << "infinity" << endl;
       }
       else{
-	cout << getShortest(points,pointsX,pointsY) << endl;
+	cout << setprecision(4) << fixed << getShortest(points,pointsX,pointsY) << endl;
       }
     }
     

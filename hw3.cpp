@@ -8,10 +8,20 @@
 #include "Point.h"
 #include <vector>
 #include <algorithm>
+#include <iterator>
 #include <math.h>
 
 using namespace std;
-double distance();
+double distance(double a, double b, double c, double d);
+double bruteF(vector<Point> p);
+double getShortest(vector<Point> p, vector<Point> q);
+vector<Point> points;
+vector<Point> pointsX;
+vector<Point> pointsY;
+vector<double> sortX;
+vector<double> sortY;
+double minDistance = 10001;
+
 int main(int argc, char **argv){
   
   // verify the correct number of parameters
@@ -32,8 +42,7 @@ int main(int argc, char **argv){
   int num_cases = 1;
   double xcoord, ycoord;  
   FILE *fp = fopen(argv[1], "r");
-  vector<Point>* points = new vector<Point>;
-  vector<double> *sorting = new vector<double>;
+  
   while (num_cases != 0){
     file >> num_cases;
     int numcases = 0;
@@ -42,35 +51,85 @@ int main(int argc, char **argv){
       file >> xcoord;
       file >> ycoord;
       Point add = Point(xcoord,ycoord);  
-      points->push_back(add);
-      sorting->push_back(xcoord);
+      points.push_back(add);
+      sortX.push_back(xcoord);
+      sortY.push_back(ycoord);
       numcases++;
     }
 
     cout << endl;
-    //Sorts values
-    sort(sorting->begin(),sorting->end());
+    //Sorts X values
+    sort(sortX.begin(),sortX.end());
    
-    vector<Point> *store = new vector<Point>;
-   
-    for(vector<double>::const_iterator y = sorting->begin(); y != sorting->end(); ++y){
-      for(vector<Point>::const_iterator z = points->begin(); z != points->end(); ++z){        
-	if(*y == z->getX() && store->size() < points->size()){
+    for(vector<double>::const_iterator y = sortX.begin(); y != sortX.end(); ++y){
+      for(vector<Point>::const_iterator z = points.begin(); z != points.end(); ++z){        
+	if(*y == z->getX() && pointsX.size() < points.size()){
 	  Point add2 = Point(z->getX(),z->getY());
-	  store->push_back(add2);
+	  pointsX.push_back(add2);
         }
       }
     }
-    for(vector<Point>::iterator a = store->begin(); a != store->end(); ++a){
+    //Sorts Y values
+    sort(sortY.begin(),sortY.end());
+   
+    for(vector<double>::const_iterator w = sortY.begin(); w != sortY.end(); ++w){
+      for(vector<Point>::const_iterator x = points.begin(); x != points.end(); ++x){        
+	if(*w == x->getY() && pointsY.size() < points.size()){
+	  Point add2 = Point(x->getX(),x->getY());
+	  pointsY.push_back(add2);
+        }
+      }
+    } 
+    
+    //Prints Points
+    cout << "Points" << endl;
+    for(vector<Point>::iterator a = points.begin(); a != points.end(); ++a){
       cout << a->getX() << "," << a->getY() << endl;
     }
-  
-    sorting->clear();
-    points->clear();
-    store->clear();
+    
+    //Prints Points with x-coords increasing
+    cout << "PointsX" << endl;
+    for(vector<Point>::iterator b = pointsX.begin(); b != pointsX.end(); ++b){
+      cout << b->getX() << "," << b->getY() << endl;
+    }
+    
+    //Prints Points with y-coords increasing
+    cout << "PointsY" << endl;
+    for(vector<Point>::iterator c = pointsY.begin(); c != pointsY.end(); ++c){
+      cout << c->getX() << "," << c->getY() << endl;
+    }
+    
+   // cout << getShortest(left,right) << endl;
+    
+    points.clear();
+    pointsX.clear();
+    pointsY.clear();
+    sortX.clear();
+    sortY.clear();
+
   }
 }
 
 double distance(double a, double b, double c, double d){
   return pow((pow((a-c),2)-pow((b-d),2)),.5);
+}
+
+/*double getShortest(vector<Point> p, vector<Point> q){
+  if(p.size() == 1 && q.size() == 1){
+    return distance(p.getX(),p.getY(),q.getX(),q.getY());
+  }
+  else if(p.size() == 2 && q.size()==1){
+  }
+  else if(q.size() == 2 && p.size()==1){
+  }
+  else{ 
+   vector<Point> l(store.begin(),store.begin()+store.size()/2);
+   vector<Point> r(store.begin()+store.size()/2,store.end());
+    return getShortest(l,r) ;
+  }
+}*/
+
+double bruteF(vector<Point> p){
+  for(vector<Point>::const_iterator p = points.begin(); p != points.end(); ++p){      
+  }
 }

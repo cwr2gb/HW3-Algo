@@ -16,7 +16,7 @@ using namespace std;
 //Prototypes
 double distance(double a, double b, double c, double d);
 double bruteF(vector<Point> p);
-double getShortest(vector<Point> p, vector<Point> x, vector<Point> y);
+double getShortest(vector<Point> p);
 //Vectors for points
 vector<Point> points;
 vector<Point> pointsX;
@@ -25,6 +25,10 @@ vector<double> sortX;
 vector<double> sortY;
 //Min Distance variable
 double minDistance = 10001;
+double realMinDistance = 0;
+double leftMin;
+double rightMin;
+double wholeMin;
 
 int main(int argc, char **argv){
   
@@ -103,21 +107,40 @@ int main(int argc, char **argv){
     }*/
     
     if(numcases != 0){
-      if(getShortest(points,pointsX,pointsY) >= 10000){
+      wholeMin = getShortest(points);
+      minDistance = 10001;
+      leftMin = getShortest(pointsX);
+      minDistance = 10001;
+      rightMin = getShortest(pointsY);
+      
+      if((wholeMin <= leftMin) && (wholeMin <= leftMin)){
+	realMinDistance = wholeMin;
+      }
+      else if((leftMin <= wholeMin) && (leftMin <= rightMin)){
+	realMinDistance = leftMin;
+      }
+      else if((rightMin <= leftMin) && (rightMin <= wholeMin)){
+	realMinDistance = rightMin;
+      }
+      
+      if(realMinDistance >= 10000){
 	cout << "infinity" << endl;
       }
       else{
-	cout << setprecision(4) << fixed << getShortest(points,pointsX,pointsY) << endl;
+	cout << setprecision(4) << fixed << realMinDistance << endl;
       }
     }
     
+    realMinDistance = 0;
+    leftMin = 0;
+    rightMin = 0;
+    wholeMin = 0;
     minDistance = 10001;
     points.clear();
     pointsX.clear();
     pointsY.clear();
     sortX.clear();
     sortY.clear();
-
   }
 }
 
@@ -125,13 +148,24 @@ double distance(double a, double b, double c, double d){
   return pow(abs(pow(abs(a-c),2)+pow(abs(b-d),2)),.5);
 }
 
-double getShortest(vector<Point> p, vector<Point> x, vector<Point> y){
+double getShortest(vector<Point> p){
   if(p.size() < 4){
     return bruteF(p);
   }
   else{ 
-    //return getShortest(p,x,y);
-    return 5.0;
+    size_t const half = p.size()/2;
+    vector<Point> LS(p.begin(),(p.begin() + half));
+    vector<Point> RS((p.begin() + half),p.end());
+    double left = getShortest(LS);
+    double right = getShortest(RS);
+    if(left < minDistance){
+      minDistance = left;  
+    }
+    else if(right < minDistance){
+      minDistance = right;  
+    }
+    
+    return minDistance;
   }
 }
 
